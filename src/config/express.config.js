@@ -16,10 +16,10 @@ const app = express()
 
 // Setting up express parsers for json and urlencoded data
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 // Defining the path for mainRouter
-app.use("/v1", mainRouter);
+app.use("/bloodbridge/v1", mainRouter);
 
 app.use(errorHandler)
 

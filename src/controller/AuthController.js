@@ -8,7 +8,6 @@ class AuthController {
             // data storage
             const userObj = await userService.createUser(data)
             // send email
-            await userService.sendActivationEmail(userObj)
 
 
             res.json({
