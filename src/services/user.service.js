@@ -190,7 +190,6 @@ class userService {
       phone: userObj.phone,
       status: userObj.status,
       _id: userObj._id,
-      location: userObj.location,
       createdAt: userObj.createdAt,
       updatedAt: userObj.updatedAt,
     }

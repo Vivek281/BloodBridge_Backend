@@ -20,9 +20,7 @@ const RegisterDTO = Joi.object({
     password: Joi.string().regex(passwordRegex).required().messages({
         "string.pattern.base": "Password must contain at least 1 lowercase, 1 uppercase, 1 number, 1 special character (8-25 characters)."
     }),
-    confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
-        "any.only": "Passwords do not match."
-    }),
+    confirmPassword: Joi.string().valid(Joi.ref("password")).required(),
     phone: Joi.string().regex(mobileNo).required().messages({
         "string.pattern.base": "Should only support Nepal's mobile numbers."
     }),
