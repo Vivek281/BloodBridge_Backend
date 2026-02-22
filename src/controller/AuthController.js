@@ -136,7 +136,7 @@ class AuthController {
             next(exception)
           }
     };
-
+ 
     getLoggedInUserProfile = (req, res, next) =>{
         res.json({
             data: req.loggedInUser,
@@ -144,6 +144,23 @@ class AuthController {
             status: "OK"
         })
     }
+
+        // Logout 
+        async logout(req, res, next) {
+            try{
+                const userId = req.loggedInUser._id;
+                await sessionService.deleteSingleRowByFilter({
+                    user:userId
+                })
+                res.json({
+                    data:null,
+                    message: "You are logged out successfully.",
+                    status: "LOGOUT_SUCCESS"
+                })
+            }catch(exception){
+                next(exception);
+            }
+        }
 
 }
 

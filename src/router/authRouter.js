@@ -11,6 +11,9 @@ authRouter.get("/re-activate/:token", AuthCtrl.resendActivationLink);
 
 //Login
 authRouter.post("/login", validator(LoginDTO), AuthCtrl.userLogin);
-authRouter.get("/me", loginCheck(), AuthCtrl.getLoggedInUserProfile);
+authRouter.get("/me", loginCheck(), AuthCtrl.getLoggedInUserProfile);   // Private Route
+
+//LogOut
+authRouter.get("/logout", loginCheck(), AuthCtrl.logout)
 
 module.exports = authRouter;
