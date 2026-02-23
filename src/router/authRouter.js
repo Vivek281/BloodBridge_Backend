@@ -3,9 +3,10 @@ const AuthCtrl = require("../controller/AuthController");
 const validator = require("../middleware/validator.middleware");
 const {RegisterDTO, LoginDTO} = require("../dto/auth.dto")
 const loginCheck = require("../middleware/auth.middleware")
+const uploader = require("../middleware/uploader.middleware")
 
 //Registration
-authRouter.post("/register",validator(RegisterDTO),AuthCtrl.userRegister); 
+authRouter.post("/register",uploader().none(),validator(RegisterDTO),AuthCtrl.userRegister); 
 authRouter.get("/activate/:token", AuthCtrl.activateUser);
 authRouter.get("/re-activate/:token", AuthCtrl.resendActivationLink);
 
