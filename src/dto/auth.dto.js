@@ -37,7 +37,19 @@ const RegisterDTO = Joi.object({
     fcmToken: Joi.string().allow(null, "").optional(),
 });
 
+const UpdateDTO = Joi.object({
+    name: Joi.string().min(2).max(50).required().messages({
+        "string.min": "Name should be of atleast 2 characters"
+    }),
+    phone: Joi.string().regex(mobileNo).required().messages({
+        "string.pattern.base": "Should only support Nepal's mobile numbers."
+    }),
+    bloodGroup: Joi.string().valid(...Object.values(BloodGroup)).required(),
+    address: Joi.string().allow(null,"",).optional().default(null),
+});
+
 module.exports = {
     LoginDTO,
-    RegisterDTO
+    RegisterDTO,
+    UpdateDTO
 };

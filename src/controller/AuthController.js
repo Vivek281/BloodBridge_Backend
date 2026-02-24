@@ -162,6 +162,22 @@ class AuthController {
             }
         }
 
+        updateUserProfile = async(req, res, next) => {
+            try{
+               const id = req.loggedInUser._id
+               const filter = {_id : id};
+               const data = {...req.body}
+                const updatedUser = await userService.updateSingleRowByFilter(filter, data)
+                res.json({
+                    data:updatedUser,
+                    message:"Data updated successfully.",
+                    status: "UPDATE_SUCCESS"
+                })
+            }catch(exception){
+                next(exception);
+            }
+        }
+
 }
 
 module.exports = new AuthController();
