@@ -1,6 +1,10 @@
 const userService = require("../services/user.service")
 const { randomStringGenerator } = require("../utilities/helper")
 const {Status} = require("../config/constants")
+const sessionService = require("../services/session.service")
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken")
+const { AppConfig } = require("../config/app.config")
 
 class AuthController {
     userRegister = async (req, res, next) => {
@@ -94,6 +98,85 @@ class AuthController {
             next(exception);
         }
     };
+
+    userLogin = async(req, res, next) =>{
+        try {
+            const {email, password} = req.body;
+            const userDetail = await userService.getSingleUserByFilter({email: email})
+            // email verify
+            if(!userDetail) {
+              throw {code: 404, message: "User not registered", status: "USER_NOT_REGISTERED_ERR"}
+            }
+            // activation verify
+            if(userDetail.status !== Status.ACTIVE) {
+              throw {code: 422, message: "Your account is not active yet.", status: "NOT_ACTIVATED_ERR"}
+            }
+            // password verify
+            if(!bcrypt.compareSync(password, userDetail.password)) {
+              throw {code: 422, message: "Credentials does not match", status: "CREDENTIAL_ERR"}
+            }
+            // if we found the user and the possword did match
+            const accessToken = jwt.sign({sub:userDetail._id}, AppConfig.jwtSecret, {expiresIn:"1d"})
+
+            const session = await sessionService.storeSession({
+                user:userDetail._id,
+                token: accessToken,
+                device:"web"
+            })
+            res.json({
+                data:{
+                    token:accessToken,
+                    sessionId:session._id
+                },
+                message:"You are logged in successfully",
+                status:"LOGIN_SUCCESS"
+            })
+            
+          } catch(exception) {
+            next(exception)
+          }
+    };
+ 
+    getLoggedInUserProfile = (req, res, next) =>{
+        res.json({
+            data: req.loggedInUser,
+            message: "User ID",
+            status: "OK"
+        })
+    }
+
+        // Logout 
+        async logout(req, res, next) {
+            try{
+                const userId = req.loggedInUser._id;
+                await sessionService.deleteSingleRowByFilter({
+                    user:userId
+                })
+                res.json({
+                    data:null,
+                    message: "You are logged out successfully.",
+                    status: "LOGOUT_SUCCESS"
+                })
+            }catch(exception){
+                next(exception);
+            }
+        }
+
+        updateUserProfile = async(req, res, next) => {
+            try{
+               const id = req.loggedInUser._id
+               const filter = {_id : id};
+               const data = {...req.body}
+                const updatedUser = await userService.updateSingleRowByFilter(filter, data)
+                res.json({
+                    data:updatedUser,
+                    message:"Data updated successfully.",
+                    status: "UPDATE_SUCCESS"
+                })
+            }catch(exception){
+                next(exception);
+            }
+        }
 
 }
 
