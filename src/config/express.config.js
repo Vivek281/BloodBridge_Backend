@@ -14,32 +14,35 @@ const { rateLimit } = require("express-rate-limit");
 const helmet = require("helmet");
 
 
+// Build the instance
+const app = express();
 
-//Building and instance of express
-const app = express()
-// defining the rate limit
-const limiter = rateLimit({
-    windowMs: 5 * 60 * 1000, // 1 minute
-    max: 100 // limit each IP to 100 requests per windowMs
-})
-
+// 1. Move this to the VERY TOP before any other app.use
 app.set('trust proxy', 1);
 
-// applying the rate limit to all routes
-app.use(limiter)
-// using the helmet middleware
-app.use(helmet());
-// using the cors middleware
-app.use(cors());
+// 2. Updated Limiter logic
+const limiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    message: "Too many requests from this IP, please try again after 5 minutes"
+});
 
-// Setting up express parsers for json and urlencoded data
+// 3. Security Middlewares
+app.use(limiter);
+app.use(helmet());
+
+// 4. CORS - Explicitly allow your local frontend if needed
+app.use(cors({
+    origin: ["http://localhost:5173", "https://your-frontend.vercel.app"], // Add your origins
+    credentials: true
+}));
+
+// Rest of your parsers and routers...
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Defining the path for mainRouter
 app.use("/bloodbridge/v1", mainRouter);
+app.use(errorHandler);
 
-app.use(errorHandler)
-
-module.exports = app
-
+module.exports = app;
