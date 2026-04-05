@@ -11,7 +11,7 @@ class MailService {
             this.#transport = nodemailer.createTransport({
                 // Use host instead of service for stricter control
                 host: SMTPConfig.host, // Ensure this is "smtp.gmail.com"
-                port: 587,
+                port: SMTPConfig.port,
                 secure: false, // false for 587, true for 465
                 auth: {
                     user: SMTPConfig.user,
