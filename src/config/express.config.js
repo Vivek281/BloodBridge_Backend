@@ -19,9 +19,11 @@ const helmet = require("helmet");
 const app = express()
 // defining the rate limit
 const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
+    windowMs: 5 * 60 * 1000, // 1 minute
     max: 100 // limit each IP to 100 requests per windowMs
 })
+
+app.set('trust proxy', 1);
 
 // applying the rate limit to all routes
 app.use(limiter)

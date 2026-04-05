@@ -15,7 +15,8 @@ class MailService {
                 auth:{
                     user:SMTPConfig.user,
                     pass:SMTPConfig.password,
-                }
+                },
+                family: 4
             })
             console.log("**SMTP Server connected***")
         }catch(exception){
