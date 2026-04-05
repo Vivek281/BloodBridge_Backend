@@ -212,6 +212,14 @@ class userService {
       throw(exception)
     }
   }
+  async addToSet(filter, data){
+    try{
+      const updatedUser = await UserModel.findOneAndUpdate(filter, {$addToSet:data}, {new:true})
+      return updatedUser;
+    }catch(exception){
+      throw(exception)
+    }
+  }
 }
 
 module.exports = new userService;

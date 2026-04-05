@@ -21,9 +21,23 @@ const Status = {
     ACTIVE : "active",
     INACTIVE : "inactive"
 }
+const Urgency = {
+    LOW:"low",
+    MEDIUM:"medium",
+    HIGH:"high",
+    EMERGENCY:"emergency"
+}
+const RequestStatus = {
+    PENDING:"pending",
+    ACCEPTED:"accepted",
+    FULFILLED:"fulfilled",
+    CANCELLED:"cancelled"
+}
 module.exports = {
     BloodGroup,
     Roles,
     Gender,
-    Status
+    Status,
+    Urgency,
+    RequestStatus
 }

@@ -12,7 +12,7 @@ class SessionService{
     async getSingleRowByFilter(filter){
         try{
             const session = await SessionModel.findOne(filter)
-            .populate("user", ["_id","name","email","bloodGroup","status","role","address","availability"])
+            .populate("user", ["_id","name","email","bloodGroup","status","role","address","availability","fcmTokens"])
             return session
         }catch(exception){
             throw exception;

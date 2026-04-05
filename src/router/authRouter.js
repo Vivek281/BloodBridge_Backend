@@ -16,6 +16,7 @@ authRouter.get("/me", loginCheck(), AuthCtrl.getLoggedInUserProfile);   // Priva
 
 authRouter.patch("/me", loginCheck(),uploader().none(),validator(UpdateDTO), AuthCtrl.updateUserProfile);
 
+authRouter.patch("/setFCM", loginCheck(),uploader().none(), AuthCtrl.setFCM); 
 //LogOut
 authRouter.get("/logout", loginCheck(), AuthCtrl.logout)
 
