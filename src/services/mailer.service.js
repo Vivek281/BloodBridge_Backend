@@ -12,7 +12,7 @@ class MailService {
                 // Use host instead of service for stricter control
                 host: SMTPConfig.host, // Ensure this is "smtp.gmail.com"
                 port: SMTPConfig.port,
-                secure: true, // false for 587, true for 465
+                secure: false, // false for 587, true for 465
                 auth: {
                     user: SMTPConfig.user,
                     pass: SMTPConfig.password,
