@@ -18,7 +18,8 @@ class MailService {
                     pass: SMTPConfig.password,
                 },
                 // CRITICAL: Force IPv4 to avoid Render's IPv6 reachability issues
-                family: 4
+                family: 4,
+                connectionTimeout: 10000
             });
 
             // Log to verify it's working
