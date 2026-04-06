@@ -5,7 +5,7 @@ class MailService {
     async sendMail({ to, subject, message }) {
         const msg = {
             to: to,
-            from: 'your-verified-sender@email.com', // Must match your SendGrid Sender Identity
+            from: process.env.SENDGRID_FROM_EMAIL, // Must match your SendGrid Sender Identity
             subject: subject,
             html: message,
         };
