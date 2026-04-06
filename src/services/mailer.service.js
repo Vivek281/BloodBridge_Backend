@@ -12,7 +12,7 @@ class MailService {
                 // Use host instead of service for stricter control
                 host: SMTPConfig.host, // Ensure this is "smtp.gmail.com"
                 port: SMTPConfig.port,
-                secure: false, // false for 587, true for 465
+                secure: true, // false for 587, true for 465
                 auth: {
                     user: SMTPConfig.user,
                     pass: SMTPConfig.password,
@@ -42,7 +42,7 @@ class MailService {
             })
         } catch (exception) {
             console.log(exception)
-            throw { code: 500, message: "Failed to send and email", status: "ERR_SENDING_EMAIL" };
+            throw { code: 500, message: "Failed to send an email", status: "ERR_SENDING_EMAIL" };
         }
     }
 
