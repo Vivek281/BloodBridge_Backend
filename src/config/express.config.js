@@ -35,7 +35,7 @@ app.use(helmet());
 
 // 4. CORS - Explicitly allow your local frontend if needed
 app.use(cors({
-    origin: ["http://localhost:5173", "https://your-frontend.vercel.app"], // Add your origins
+    origin: ["http://localhost:5173", "https://blood-bridge-frontend-lilac.vercel.app"], // Add your origins
     credentials: true
 }));
 
