@@ -11,7 +11,7 @@ const server = http.createServer(app);
  * Render assigns a port via environment variables. 
  * If it's not found (like on your local PC), it defaults to 9005.
  */
-const PORT = process.env.PORT || 9005;
+const PORT = process.env.PORT || 10000;
 
 /**
  * 2. REMOVE "localhost":
@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 9005;
  * to be reachable from the internet. Removing the "localhost" 
  * argument achieves this automatically.
  */
-server.listen(PORT, (err) => {
+server.listen(PORT, '0.0.0.0', (err) => {
     if (!err) {
         console.log(`Server is running on port: ${PORT}`);
         console.log("Press Ctrl + C to disconnect the server..........");
