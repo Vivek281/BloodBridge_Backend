@@ -1,5 +1,6 @@
 // donation.service.js
 const DonationModel = require("../models/Donation.model");
+const UserModel = require("../models/User.model");
 
 class DonationService {
     createDonation = async (data) => {
@@ -12,8 +13,8 @@ class DonationService {
     }
     async getSingleRowByFilter(filter) {
         try{
-            const data = await BloodRequestModel.findOne(filter)
-            .select("_id phone address bloodGroup donationHistory gender").lean();;
+            const data = await UserModel.findOne(filter)
+            .select("_id phone address bloodGroup donationHistory gender").lean();
             return data;
         }catch(exception){
             throw exception
