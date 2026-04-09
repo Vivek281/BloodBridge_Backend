@@ -14,7 +14,7 @@ class DonationService {
     async getSingleRowByFilter(filter) {
         try{
             const data = await UserModel.findOne(filter)
-            .select("_id phone address bloodGroup donationHistory gender").lean();
+            .select("_id name phone address bloodGroup donationHistory gender").lean();
             return data;
         }catch(exception){
             throw exception
