@@ -68,6 +68,28 @@ class BloodRequestController {
         }
     }
 
+    myRequestDetail = async (req, res, next) => {
+        try{
+            const id = req.loggedInUser._id;
+            let filter = {requestedBy: id, status: RequestStatus.PENDING};
+            const bloodRequestDetail = await bloodRequestService.getSingleRowByFilter(filter);
+            if (!bloodRequestDetail) {
+                throw {
+                    code: 404,
+                    message: "Blood Request not found",
+                    status: "BLOOD_REQUEST_NOT_FOUND_ERR",
+                };
+            }
+            res.json({
+                data: bloodRequestDetail,
+                message: "Blood Request Detail.",
+                status: "OK"
+            })
+        }catch(exception){
+            next(exception);
+        }
+    }
+
     getRequestWithDonorId = async (req, res, next)  => {
         try{
             const donorId = req.loggedInUser._id;
@@ -85,7 +107,7 @@ class BloodRequestController {
                 };
             }
             let filter = { _id: donorDetail.availability.activeRequestId}
-            
+
             const bloodRequestDetail = await bloodRequestService.getSingleRowByFilter(filter);
             if (!bloodRequestDetail) {
                 throw {

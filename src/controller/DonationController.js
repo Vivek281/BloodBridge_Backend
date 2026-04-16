@@ -14,7 +14,7 @@ class DonationController {
                 throw {
                     code: 404,
                     message: "Donor not found",
-                    status: "BLOOD_REQUEST_NOT_FOUND_ERR",
+                    status: "DONOR_NOT_FOUND_ERR",
                 };
             }
             res.json({
@@ -23,6 +23,37 @@ class DonationController {
                 status: "OK"
             })
         } catch (exception) {
+            next(exception);
+        }
+    }
+
+    getDonorByDonationId = async (req, res, next) => {
+        try{
+            const donationId = req.params.id;
+            let filter = {_id: donationId};
+            const donationDetail = await donationService.getSingleDonationByFilter(filter);
+            if(!donationDetail){
+                throw{
+                    code:404,
+                    message: "Donation Details Not Found",
+                    status: "DONATION_DETAILS_NOT_FOUND_ERR",
+                }
+            }
+            const donorId = donationDetail.donor
+            const donorDetail = await donationService.getSingleRowByFilter({_id: donorId});
+            if (!donorDetail) {
+                throw {
+                    code: 404,
+                    message: "Donor not found",
+                    status: "DONOR_NOT_FOUND_ERR",
+                };
+            }
+            res.json({
+                data: donorDetail,
+                message: "Donor Detail.",
+                status: "OK"
+            })
+        }catch(exception){
             next(exception);
         }
     }

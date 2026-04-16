@@ -21,6 +21,16 @@ class DonationService {
         }
     }
 
+    async getSingleDonationByFilter(filter){
+        try{
+            const donationDetail = await DonationModel.findOne(filter)
+            .select("donor request status").lean();
+            return donationDetail;
+        }catch(exception){
+            throw exception
+        }
+    }
+
     async updateSingleRowByFilter(filter, data){
         try{
           const updatedDonation = await DonationModel.findOneAndUpdate(filter, {$set:data}, {new:true})
