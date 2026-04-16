@@ -3,47 +3,40 @@ const UserModel = require("../models/User.model"); // Ensure you import your Use
 const { pruneDeadTokens } = require("../utilities/helper");
 
 class NotificationService {
-    static async sendNotification(deviceTokens, bloodRequest) {
+    static async sendNotificationWithData (deviceTokens, notificationBlock, data) {
         if (!deviceTokens || deviceTokens.length === 0) return null;
 
-        const messages = deviceTokens.map(token => ({
-            notification: {
-                title: "Urgent Blood Request 🩸",
-                body: `Immediate need for ${bloodRequest.patientBloodGroup} at ${bloodRequest.hospitalName}.`
-            },
-            data: {
-                requestId: bloodRequest._id.toString(), // The ID from MongoDB
-            },
-            token: token
-        }));
+            const messages = deviceTokens.map(token => ({
+                notification: notificationBlock,
+                data: data,
+                token: token
+            }));
+            
 
         try {
             // Using sendEach for individual status reporting per token
-            const response = await admin.messaging().sendEach(messages);
+            const response = await admin.messaging().sendEach(messages)
             // Prune dead tokens
             await pruneDeadTokens(response, deviceTokens);
 
             return response;
         } catch (error) {
             console.error("FCM Send Error:", error);
-            throw error;
         }
     }
 
-    static async notifyRequester (deviceTokens, notificationBlock, donor) {
+    static async sendNotificationWithOutData (deviceTokens, notificationBlock) {
         if (!deviceTokens || deviceTokens.length === 0) return null;
 
-        const messages = deviceTokens.map(token => ({
-            notification: notificationBlock,
-            data: {
-                donorId: donor._id.toString(), // The Donor ID from MongoDB
-            },
-            token: token
-        }));
+            const messages = deviceTokens.map(token => ({
+                notification: notificationBlock,
+                token: token
+            }));
+            
 
         try {
             // Using sendEach for individual status reporting per token
-            const response = await admin.messaging().sendEach(messages);
+            const response = await admin.messaging().sendEach(messages)
             // Prune dead tokens
             await pruneDeadTokens(response, deviceTokens);
 

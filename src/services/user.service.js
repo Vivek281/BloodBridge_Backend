@@ -212,6 +212,20 @@ class userService {
       throw(exception)
     }
   }
+
+  async operatorNeutralUpdateSingleRowByFilter(filter, updateQuery) {
+    try {
+        // Removing the hardcoded {$set: data}
+        const updatedUser = await UserModel.findOneAndUpdate(
+            filter, 
+            updateQuery, // Passing the object directly
+            { new: true }
+        );
+        return updatedUser;
+    } catch (exception) {
+        throw (exception);
+    }
+}
   async addToSet(filter, data){
     try{
       const updatedUser = await UserModel.findOneAndUpdate(filter, {$addToSet:data}, {new:true})

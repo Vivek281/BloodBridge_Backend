@@ -14,10 +14,19 @@ class DonationService {
     async getSingleRowByFilter(filter) {
         try{
             const data = await UserModel.findOne(filter)
-            .select("_id name phone address bloodGroup donationHistory gender").lean();
+            .select("_id name phone address availability bloodGroup donationHistory gender").lean();
             return data;
         }catch(exception){
             throw exception
+        }
+    }
+
+    async updateSingleRowByFilter(filter, data){
+        try{
+          const updatedDonation = await DonationModel.findOneAndUpdate(filter, {$set:data}, {new:true})
+          return updatedDonation;
+        }catch(exception){
+          throw(exception)
         }
     }
 }
