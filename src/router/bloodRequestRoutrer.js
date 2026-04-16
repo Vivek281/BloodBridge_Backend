@@ -8,6 +8,7 @@ const { CreateBloodRequestDTO } = require("../dto/bloodRequest.dto")
 bloodRequestRouter.post("/create-request", loginCheck(),uploader().single("healthReport"),validator(CreateBloodRequestDTO), BloodRequestCtrl.createRequest);
 bloodRequestRouter.get("/profile", loginCheck(), BloodRequestCtrl.getRequestWithDonorId);
 bloodRequestRouter.get("/my-request-detail", loginCheck(), BloodRequestCtrl.myRequestDetail);
+bloodRequestRouter.get("/cancel/:id", loginCheck(), BloodRequestCtrl.cancelRequest);
 bloodRequestRouter.get("/:id", loginCheck(), BloodRequestCtrl.getRequest);
 bloodRequestRouter.post("/:id/accept", loginCheck(), BloodRequestCtrl.acceptRequest);
 bloodRequestRouter.patch("/fulfill", loginCheck(), BloodRequestCtrl.requestFulfilled);

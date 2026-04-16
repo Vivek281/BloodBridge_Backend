@@ -33,11 +33,18 @@ const RequestStatus = {
     FULFILLED:"fulfilled",
     CANCELLED:"cancelled"
 }
+const DonationStatus = {
+    ACCEPTED:"accepted",
+    COMPLETED:"completed",
+    FAILED:"failed",
+    CANCELLED:"cancelled"
+}
 module.exports = {
     BloodGroup,
     Roles,
     Gender,
     Status,
     Urgency,
-    RequestStatus
+    RequestStatus,
+    DonationStatus
 }

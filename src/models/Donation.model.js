@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { DonationStatus } = require("../config/constants");
 
 const DonationSchema = new mongoose.Schema(
   {
@@ -16,8 +17,8 @@ const DonationSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["accepted", "completed", "failed"],
-      default: "accepted"
+      enum: Object.values(DonationStatus),
+      default: DonationStatus.ACCEPTED
     },
 
     acceptedAt: {

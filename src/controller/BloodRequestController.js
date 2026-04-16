@@ -2,7 +2,7 @@ const bloodRequestService = require("../services/bloodRequest.service")
 const notificationService = require("../services/notification.service")
 const donationService = require("../services/donation.service");
 const userService = require("../services/user.service");
-const { RequestStatus } = require("../config/constants");
+const { RequestStatus, DonationStatus } = require("../config/constants");
 class BloodRequestController {
     createRequest = async (req, res, next) => {
         try {
@@ -87,6 +87,60 @@ class BloodRequestController {
             })
         }catch(exception){
             next(exception);
+        }
+    }
+
+    cancelRequest = async (req, res, next) => {
+        try{
+            const requestId = req.params.id;
+            const bloodRequestDetail = await bloodRequestService.getSingleRowByFilter({_id:requestId});
+            if(!bloodRequestDetail){
+                throw {
+                    code: 404,
+                    message: "Blood Request not found",
+                    status: "BLOOD_REQUEST_NOT_FOUND_ERR",
+                };
+            }
+
+            if(bloodRequestDetail.acceptedDonationId){
+                const donationDetail = await donationService.updateSingleRowByFilter({_id: bloodRequestDetail.acceptedDonationId},{status: DonationStatus.CANCELLED});
+                if(!donationDetail){
+                    throw {
+                        code: 404,
+                        message: "Donation Detail not found",
+                        status: "DONATION_DETAIL_NOT_FOUND_ERR",
+                    };
+                }
+                const donorId = donationDetail.donor;
+                const updatedDonor = await userService.operatorNeutralUpdateSingleRowByFilter({ _id: donorId }, {$set:{ "availability.activeRequestId": null, "availability.isAvailable": true }});
+                if (!updatedDonor) {
+                    throw { code: 404, message: "No Donor Found to update.", status: "DONOR_NOT_FOUND" };
+                }
+                await this.notifyDonor(updatedDonor);
+
+            }
+
+            await bloodRequestService.updateSingleRowByFilter({_id: requestId}, { status: RequestStatus.CANCELLED, acceptedDonationId : null });
+
+            res.json({
+                message: "Request Canceled Successfully.",
+                status: "OK"
+            })
+        }catch(exception){
+            next(exception)
+        }
+    }
+
+    notifyDonor = async(updatedDonor) => {
+        try{
+            if (updatedDonor?.fcmTokens?.length > 0) {
+                await notificationService.sendNotificationWithOutData(updatedDonor.fcmTokens, {
+                    title: "Request Cancled! 🩸",
+                    body: "The Requester canceled the request. No need to take any action. "
+                });
+            }
+        }catch(exception){
+            console.log("Notification Operator Error:", exception);
         }
     }
 
