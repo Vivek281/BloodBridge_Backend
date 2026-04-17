@@ -319,6 +319,35 @@ class BloodRequestController {
             next(exception);
         }
     }
+
+    getRequestList = async (req, res, next) => {
+        try{
+            const userId = req.loggedInUser._id;
+            const userDetail = await userService.getSingleUserByFilter({_id: userId});
+    
+            let page = +req.query.page || 1
+            let limit = +req.query.limit || 20;
+    
+            const {data, pagination} = await bloodRequestService.getRequestListByUserDetail(userDetail, {page, limit});
+
+            if (!data) {
+                return res.status(400).json({
+                    message: "No Blood Request found in your area.",
+                    status: "UNAVAILABLE"
+                });
+            }
+            res.json({
+                data: data, 
+                message: "Request Listing",
+                status: "OK",
+                meta: {
+                  pagination
+                }
+            })
+        }catch(exception){
+            next(exception);
+        }
+    }
 }
 
 module.exports = new BloodRequestController();
