@@ -70,7 +70,7 @@ class userService {
 
                         <!-- Action Button -->
                         <div style="text-align: center; margin: 40px 0;">
-                          <a href="${AppConfig.url}auth/activate/${userObj.activationToken}"
+                          <a href="${AppConfig.url}bloodbridge/v1/auth/activate/${userObj.activationToken}"
                             style="background-color: #b91c1c; color: #ffffff; padding: 18px 45px; border-radius: 8px; font-size: 16px; font-weight: bold; text-decoration: none; display: inline-block; transition: all 0.2s ease;">
                             Verify My Account
                           </a>
@@ -80,8 +80,8 @@ class userService {
                         <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-top: 30px;">
                           <p style="color: #4b5563; font-size: 14px; margin-top: 0; font-weight: bold;">Problem with the button? Copy and paste this link:</p>
                           <p style="margin: 5px 0 0; word-break: break-all;">
-                            <a href="${AppConfig.url}auth/activate/${userObj.activationToken}" style="color: #b91c1c; font-size: 13px; text-decoration: underline;">
-                              ${AppConfig.url}auth/activate/${userObj.activationToken}
+                            <a href="${AppConfig.url}bloodbridge/v1/auth/activate/${userObj.activationToken}" style="color: #b91c1c; font-size: 13px; text-decoration: underline;">
+                              ${AppConfig.url}bloodbridge/v1/auth/activate/${userObj.activationToken}
                             </a>
                           </p>
                         </div>
@@ -141,7 +141,7 @@ class userService {
 
                         <!-- Action Button -->
                         <div style="text-align: center; margin: 40px 0;">
-                          <a href="${AppConfig.url}auth/activate/${userObj.activationToken}"
+                          <a href="${AppConfig.url}bloodbridge/v1/auth/activate/${userObj.activationToken}"
                             style="background-color: #b91c1c; color: #ffffff; padding: 18px 45px; border-radius: 8px; font-size: 16px; font-weight: bold; text-decoration: none; display: inline-block; transition: all 0.2s ease;">
                             Verify My Account
                           </a>
@@ -151,8 +151,8 @@ class userService {
                         <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px; margin-top: 30px;">
                           <p style="color: #4b5563; font-size: 14px; margin-top: 0; font-weight: bold;">Problem with the button? Copy and paste this link:</p>
                           <p style="margin: 5px 0 0; word-break: break-all;">
-                            <a href="${AppConfig.url}auth/activate/${userObj.activationToken}" style="color: #b91c1c; font-size: 13px; text-decoration: underline;">
-                              ${AppConfig.url}auth/activate/${userObj.activationToken}
+                            <a href="${AppConfig.url}bloodbridge/v1/auth/activate/${userObj.activationToken}" style="color: #b91c1c; font-size: 13px; text-decoration: underline;">
+                              ${AppConfig.url}bloodbridge/v1/auth/activate/${userObj.activationToken}
                             </a>
                           </p>
                         </div>
@@ -207,6 +207,28 @@ class userService {
   async updateSingleRowByFilter(filter, data){
     try{
       const updatedUser = await UserModel.findOneAndUpdate(filter, {$set:data}, {new:true})
+      return updatedUser;
+    }catch(exception){
+      throw(exception)
+    }
+  }
+
+  async operatorNeutralUpdateSingleRowByFilter(filter, updateQuery) {
+    try {
+        // Removing the hardcoded {$set: data}
+        const updatedUser = await UserModel.findOneAndUpdate(
+            filter, 
+            updateQuery, // Passing the object directly
+            { new: true }
+        );
+        return updatedUser;
+    } catch (exception) {
+        throw (exception);
+    }
+}
+  async addToSet(filter, data){
+    try{
+      const updatedUser = await UserModel.findOneAndUpdate(filter, {$addToSet:data}, {new:true})
       return updatedUser;
     }catch(exception){
       throw(exception)

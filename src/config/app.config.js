@@ -28,9 +28,14 @@ const AppConfig = {
 
 }
 
+const FrontEnd ={
+    url:process.env.FRONTEND_URL
+}
+
 module.exports = {
     DBConfig,
     AppConfig,
     SMTPConfig,
-    CloudinaryConfig
+    CloudinaryConfig,
+    FrontEnd,
 }

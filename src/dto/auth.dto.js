@@ -26,7 +26,7 @@ const RegisterDTO = Joi.object({
     }),
     bloodGroup: Joi.string().valid(...Object.values(BloodGroup)).required(),
     gender: Joi.string().valid(...Object.values(Gender)).required(),
-    role: Joi.string().valid(...Object.values(Roles)).default(Roles.USER),
+    role: Joi.string().valid(...Object.values(Roles)).default(Roles.USER).optional(),
     address: Joi.string().allow(null,"",).optional().default(null),
     
     // GeoJSON Data - Flat structure for the incoming request
