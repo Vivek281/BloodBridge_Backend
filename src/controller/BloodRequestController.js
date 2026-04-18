@@ -7,6 +7,14 @@ class BloodRequestController {
     createRequest = async (req, res, next) => {
         try {
             const data = await bloodRequestService.transformForBloodRequest(req);
+            const existingBloodRequest = await bloodRequestService.getSingleRowByFilter({requestedBy: data.requestedBy, status: RequestStatus.PENDING});
+            if(existingBloodRequest){
+                throw {
+                    code: 409,
+                    message: "Pending request exists.",
+                    status: "DUPLICATE_REQUEST_ERR",
+                };
+            }
             const bloodRequest = await bloodRequestService.store(data);
             const donors = await bloodRequestService.findDonor(bloodRequest);
 
